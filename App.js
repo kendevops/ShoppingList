@@ -39,7 +39,7 @@ function TextIdentification() {
   }
 
   return (
-    <View style={styles.Text}>
+    <View style={styles.text}>
       <View>
         <Text>Text identification</Text>
         <Button type="file" onChange={identifyFromFile}></Button>
@@ -111,7 +111,7 @@ function EntityIdentification() {
   }
 
   return (
-    <View style={styles.Text}>
+    <View style={styles.text}>
       <View>
         <Text>Entity identification</Text>
         <TextInput type="file" onChange={identifyFromFile}></TextInput>
@@ -141,7 +141,7 @@ function PredictionsUpload() {
   }
 
   return (
-    <View style={styles.Text}>
+    <View style={styles.text}>
       <View>
         <Text>Upload to predictions s3</Text>
         <Button onChange={upload}></Button>
@@ -175,13 +175,13 @@ function LabelsIdentification() {
   }
 
   return (
-    <div className="Text">
-      <div>
+    <View style={styles.text}>
+      <View>
         <h3>Labels identification</h3>
-        <Button type="file" onChange={identifyFromFile}></Button>
-        <p>{response}</p>
-      </div>
-    </div>
+        <Button onChange={identifyFromFile}></Button>
+        <Text>{response}</Text>
+      </View>
+    </View>
   );
 }
 
@@ -259,12 +259,12 @@ function SpeechToText(props) {
 
     return (
       <View style={styles.audioRecorder}>
-        <div>
-          {recording && <button onClick={stopRecording}>Stop recording</button>}
+        <View>
+          {recording && <Button onClick={stopRecording}>Stop recording</Button>}
           {!recording && (
-            <button onClick={startRecording}>Start recording</button>
+            <Button onClick={startRecording}>Start recording</Button>
           )}
-        </div>
+        </View>
       </View>
     );
   }
@@ -285,13 +285,13 @@ function SpeechToText(props) {
   }
 
   return (
-    <div className="Text">
-      <div>
-        <h3>Speech to text</h3>
+    <View style={styles.text}>
+      <View>
+        <Text>Speech to text</Text>
         <AudioRecorder finishRecording={convertFromBuffer} />
-        <p>{response}</p>
-      </div>
-    </div>
+        <Text>{response}</Text>
+      </View>
+    </View>
   );
 }
 
@@ -337,14 +337,14 @@ function TextToSpeech() {
   }
 
   return (
-    <div className="Text">
-      <div>
-        <h3>Text To Speech</h3>
-        <input value={textToGenerateSpeech} onChange={setText}></input>
-        <button onClick={generateTextToSpeech}>Text to Speech</button>
-        <h3>{response}</h3>
-      </div>
-    </div>
+    <View style={styles.text}>
+      <View>
+        <Text>Text To Speech</Text>
+        <TextInput value={textToGenerateSpeech} onChange={setText}></TextInput>
+        <Button onClick={generateTextToSpeech}>Text to Speech</Button>
+        <Text>{response}</Text>
+      </View>
+    </View>
   );
 }
 
@@ -374,14 +374,14 @@ function TextTranslation() {
   }
 
   return (
-    <div className="Text">
-      <div>
-        <h3>Text Translation</h3>
-        <input value={textToTranslate} onChange={setText}></input>
-        <button onClick={translate}>Translate</button>
-        <p>{response}</p>
-      </div>
-    </div>
+    <View style={styles.text}>
+      <View>
+        <Text>Text Translation</Text>
+        <TextInput value={textToTranslate} onChange={setText}></TextInput>
+        <Button onClick={translate}>Translate</Button>
+        <Text>{response}</Text>
+      </View>
+    </View>
   );
 }
 
@@ -411,14 +411,14 @@ function TextInterpretation() {
   }
 
   return (
-    <div className="Text">
-      <div>
-        <h3>Text interpretation</h3>
-        <input value={textToInterpret} onChange={setText}></input>
-        <button onClick={interpretFromPredictions}>test</button>
-        <p>{response}</p>
-      </div>
-    </div>
+    <View style={styles.text}>
+      <View>
+        <Text>Text interpretation</Text>
+        <TextInput value={textToInterpret} onChange={setText}></TextInput>
+        <Button onClick={interpretFromPredictions}>test</Button>
+        <Text>{response}</Text>
+      </View>
+    </View>
   );
 }
 
