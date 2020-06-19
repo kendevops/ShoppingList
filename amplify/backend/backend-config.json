@@ -1,1 +1,17 @@
-{}
+{
+	"auth": {
+		"shoppinglist40a4f956": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": []
+		}
+	},
+	"predictions": {
+		"identifyEntitiesc9c6ed6e": {
+			"providerPlugin": "awscloudformation",
+			"service": "Rekognition",
+			"dependsOn": [],
+			"identifyType": "identifyEntities"
+		}
+	}
+}
