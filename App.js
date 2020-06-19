@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View, Button } from "react-native";
+import { StyleSheet, Text, TextInput, View, Button, Image } from "react-native";
 import Amplify, { Storage, Predictions } from "aws-amplify";
 import awsconfig from "./aws-exports";
 import { AmazonAIPredictionsProvider } from "@aws-amplify/predictions";
 
-import mic from "microphone-stream";
+// import mic from "microphone-stream";
 
 Amplify.configure(awsconfig);
 Amplify.addPluggable(new AmazonAIPredictionsProvider());
@@ -42,7 +42,7 @@ function TextIdentification() {
     <View style={styles.text}>
       <View>
         <Text>Text identification</Text>
-        <Button type="file" onChange={identifyFromFile}></Button>
+        <Button onPress={identifyFromFile} title="identify f" />
         <Text>{response}</Text>
       </View>
     </View>
@@ -114,41 +114,41 @@ function EntityIdentification() {
     <View style={styles.text}>
       <View>
         <Text>Entity identification</Text>
-        <TextInput type="file" onChange={identifyFromFile}></TextInput>
-        <p>{response}</p>
-        {src && <img src={src}></img>}
+        <Button onPress={identifyFromFile} title="Entity f" />
+        <Text>{response}</Text>
+        {src && <Image src={src}></Image>}
       </View>
     </View>
   );
 }
 
-function PredictionsUpload() {
-  /* This is Identify Entities Advanced feature
-   * This will upload user images to the appropriate bucket prefix
-   * and a Lambda trigger will automatically perform indexing
-   */
-  function upload(event) {
-    const {
-      target: { files },
-    } = event;
-    const [file] = files || [];
-    Storage.put(file.name, file, {
-      level: "protected",
-      customPrefix: {
-        protected: "protected/predictions/index-faces/",
-      },
-    });
-  }
+// function PredictionsUpload() {
+//   /* This is Identify Entities Advanced feature
+//    * This will upload user images to the appropriate bucket prefix
+//    * and a Lambda trigger will automatically perform indexing
+//    */
+//   function upload(event) {
+//     const {
+//       target: { files },
+//     } = event;
+//     const [file] = files || [];
+//     Storage.put(file.name, file, {
+//       level: "protected",
+//       customPrefix: {
+//         protected: "protected/predictions/index-faces/",
+//       },
+//     });
+//   }
 
-  return (
-    <View style={styles.text}>
-      <View>
-        <Text>Upload to predictions s3</Text>
-        <Button onChange={upload}></Button>
-      </View>
-    </View>
-  );
-}
+//   return (
+//     <View style={styles.text}>
+//       <View>
+//         <Text>Upload to predictions s3</Text>
+//         <Button onChange={upload}></Button>
+//       </View>
+//     </View>
+//   );
+// }
 
 function LabelsIdentification() {
   const [response, setResponse] = useState("Click upload for test ");
@@ -178,175 +178,175 @@ function LabelsIdentification() {
     <View style={styles.text}>
       <View>
         <h3>Labels identification</h3>
-        <Button onChange={identifyFromFile}></Button>
+        <Button onPress={identifyFromFile} title="Labels l" />
         <Text>{response}</Text>
       </View>
     </View>
   );
 }
 
-function SpeechToText(props) {
-  const [response, setResponse] = useState(
-    "Press 'start recording' to begin your transcription. Press STOP recording once you finish speaking."
-  );
+// function SpeechToText(props) {
+//   const [response, setResponse] = useState(
+//     "Press 'start recording' to begin your transcription. Press STOP recording once you finish speaking."
+//   );
 
-  function AudioRecorder(props) {
-    const [recording, setRecording] = useState(false);
-    const [micStream, setMicStream] = useState();
-    const [audioBuffer] = useState(
-      (function () {
-        let buffer = [];
-        function add(raw) {
-          buffer = buffer.concat(...raw);
-          return buffer;
-        }
-        function newBuffer() {
-          console.log("reseting buffer");
-          buffer = [];
-        }
+//   function AudioRecorder(props) {
+//     const [recording, setRecording] = useState(false);
+//     const [micStream, setMicStream] = useState();
+//     const [audioBuffer] = useState(
+//       (function () {
+//         let buffer = [];
+//         function add(raw) {
+//           buffer = buffer.concat(...raw);
+//           return buffer;
+//         }
+//         function newBuffer() {
+//           console.log("reseting buffer");
+//           buffer = [];
+//         }
 
-        return {
-          reset: function () {
-            newBuffer();
-          },
-          addData: function (raw) {
-            return add(raw);
-          },
-          getData: function () {
-            return buffer;
-          },
-        };
-      })()
-    );
+//         return {
+//           reset: function () {
+//             newBuffer();
+//           },
+//           addData: function (raw) {
+//             return add(raw);
+//           },
+//           getData: function () {
+//             return buffer;
+//           },
+//         };
+//       })()
+//     );
 
-    async function startRecording() {
-      console.log("start recording");
-      audioBuffer.reset();
+//     async function startRecording() {
+//       console.log("start recording");
+//       audioBuffer.reset();
 
-      window.navigator.mediaDevices
-        .getUserMedia({ video: false, audio: true })
-        .then((stream) => {
-          const startMic = new mic();
+//       window.navigator.mediaDevices
+//         .getUserMedia({ video: false, audio: true })
+//         .then((stream) => {
+//           const startMic = new mic();
 
-          startMic.setStream(stream);
-          startMic.on("data", (chunk) => {
-            var raw = mic.toRaw(chunk);
-            if (raw == null) {
-              return;
-            }
-            audioBuffer.addData(raw);
-          });
+//           startMic.setStream(stream);
+//           startMic.on("data", (chunk) => {
+//             var raw = mic.toRaw(chunk);
+//             if (raw == null) {
+//               return;
+//             }
+//             audioBuffer.addData(raw);
+//           });
 
-          setRecording(true);
-          setMicStream(startMic);
-        });
-    }
+//           setRecording(true);
+//           setMicStream(startMic);
+//         });
+//     }
 
-    async function stopRecording() {
-      console.log("stop recording");
-      const { finishRecording } = props;
+//     async function stopRecording() {
+//       console.log("stop recording");
+//       const { finishRecording } = props;
 
-      micStream.stop();
-      setMicStream(null);
-      setRecording(false);
+//       micStream.stop();
+//       setMicStream(null);
+//       setRecording(false);
 
-      const resultBuffer = audioBuffer.getData();
+//       const resultBuffer = audioBuffer.getData();
 
-      if (typeof finishRecording === "function") {
-        finishRecording(resultBuffer);
-      }
-    }
+//       if (typeof finishRecording === "function") {
+//         finishRecording(resultBuffer);
+//       }
+//     }
 
-    return (
-      <View style={styles.audioRecorder}>
-        <View>
-          {recording && <Button onClick={stopRecording}>Stop recording</Button>}
-          {!recording && (
-            <Button onClick={startRecording}>Start recording</Button>
-          )}
-        </View>
-      </View>
-    );
-  }
+//     return (
+//       <View style={styles.audioRecorder}>
+//         <View>
+//           {recording && <Button onClick={stopRecording}>Stop recording</Button>}
+//           {!recording && (
+//             <Button onClick={startRecording}>Start recording</Button>
+//           )}
+//         </View>
+//       </View>
+//     );
+//   }
 
-  function convertFromBuffer(bytes) {
-    setResponse("Converting text...");
+//   function convertFromBuffer(bytes) {
+//     setResponse("Converting text...");
 
-    Predictions.convert({
-      transcription: {
-        source: {
-          bytes,
-        },
-        // language: "en-US", // other options are "en-GB", "fr-FR", "fr-CA", "es-US"
-      },
-    })
-      .then(({ transcription: { fullText } }) => setResponse(fullText))
-      .catch((err) => setResponse(JSON.stringify(err, null, 2)));
-  }
+//     Predictions.convert({
+//       transcription: {
+//         source: {
+//           bytes,
+//         },
+//         // language: "en-US", // other options are "en-GB", "fr-FR", "fr-CA", "es-US"
+//       },
+//     })
+//       .then(({ transcription: { fullText } }) => setResponse(fullText))
+//       .catch((err) => setResponse(JSON.stringify(err, null, 2)));
+//   }
 
-  return (
-    <View style={styles.text}>
-      <View>
-        <Text>Speech to text</Text>
-        <AudioRecorder finishRecording={convertFromBuffer} />
-        <Text>{response}</Text>
-      </View>
-    </View>
-  );
-}
+//   return (
+//     <View style={styles.text}>
+//       <View>
+//         <Text>Speech to text</Text>
+//         <AudioRecorder finishRecording={convertFromBuffer} />
+//         <Text>{response}</Text>
+//       </View>
+//     </View>
+//   );
+// }
 
-function TextToSpeech() {
-  const [response, setResponse] = useState("...");
-  const [textToGenerateSpeech, setTextToGenerateSpeech] = useState(
-    "write to speech"
-  );
+// function TextToSpeech() {
+//   const [response, setResponse] = useState("...");
+//   const [textToGenerateSpeech, setTextToGenerateSpeech] = useState(
+//     "write to speech"
+//   );
 
-  function generateTextToSpeech() {
-    setResponse("Generating audio...");
-    Predictions.convert({
-      textToSpeech: {
-        source: {
-          text: textToGenerateSpeech,
-        },
-        voiceId: "Amy", // default configured on aws-exports.js
-        // list of different options are here https://docs.aws.amazon.com/polly/latest/dg/voicelist.html
-      },
-    })
-      .then((result) => {
-        let AudioContext = window.AudioContext || window.webkitAudioContext;
-        console.log({ AudioContext });
-        const audioCtx = new AudioContext();
-        const source = audioCtx.createBufferSource();
-        audioCtx.decodeAudioData(
-          result.audioStream,
-          (buffer) => {
-            source.buffer = buffer;
-            source.connect(audioCtx.destination);
-            source.start(0);
-          },
-          (err) => console.log({ err })
-        );
+//   function generateTextToSpeech() {
+//     setResponse("Generating audio...");
+//     Predictions.convert({
+//       textToSpeech: {
+//         source: {
+//           text: textToGenerateSpeech,
+//         },
+//         voiceId: "Amy", // default configured on aws-exports.js
+//         // list of different options are here https://docs.aws.amazon.com/polly/latest/dg/voicelist.html
+//       },
+//     })
+//       .then((result) => {
+//         let AudioContext = window.AudioContext || window.webkitAudioContext;
+//         console.log({ AudioContext });
+//         const audioCtx = new AudioContext();
+//         const source = audioCtx.createBufferSource();
+//         audioCtx.decodeAudioData(
+//           result.audioStream,
+//           (buffer) => {
+//             source.buffer = buffer;
+//             source.connect(audioCtx.destination);
+//             source.start(0);
+//           },
+//           (err) => console.log({ err })
+//         );
 
-        setResponse(`Generation completed, press play`);
-      })
-      .catch((err) => setResponse(err));
-  }
+//         setResponse(`Generation completed, press play`);
+//       })
+//       .catch((err) => setResponse(err));
+//   }
 
-  function setText(event) {
-    setTextToGenerateSpeech(event.target.value);
-  }
+//   function setText(event) {
+//     setTextToGenerateSpeech(event.target.value);
+//   }
 
-  return (
-    <View style={styles.text}>
-      <View>
-        <Text>Text To Speech</Text>
-        <TextInput value={textToGenerateSpeech} onChange={setText}></TextInput>
-        <Button onClick={generateTextToSpeech}>Text to Speech</Button>
-        <Text>{response}</Text>
-      </View>
-    </View>
-  );
-}
+//   return (
+//     <View style={styles.text}>
+//       <View>
+//         <Text>Text To Speech</Text>
+//         <TextInput value={textToGenerateSpeech} onChange={setText}></TextInput>
+//         <Button onClick={generateTextToSpeech}>Text to Speech</Button>
+//         <Text>{response}</Text>
+//       </View>
+//     </View>
+//   );
+// }
 
 function TextTranslation() {
   const [response, setResponse] = useState(
@@ -378,7 +378,7 @@ function TextTranslation() {
       <View>
         <Text>Text Translation</Text>
         <TextInput value={textToTranslate} onChange={setText}></TextInput>
-        <Button onClick={translate}>Translate</Button>
+        <Button onPress={translate} title="Translate" />
         <Text>{response}</Text>
       </View>
     </View>
@@ -415,7 +415,7 @@ function TextInterpretation() {
       <View>
         <Text>Text interpretation</Text>
         <TextInput value={textToInterpret} onChange={setText}></TextInput>
-        <Button onClick={interpretFromPredictions}>test</Button>
+        <Button onPress={interpretFromPredictions} title="test" />
         <Text>{response}</Text>
       </View>
     </View>
@@ -425,28 +425,19 @@ function TextInterpretation() {
 export default function App() {
   return (
     <View style={styles.container}>
-      Translate Text
+      <Text>Translate Text</Text>
       <TextTranslation />
-      <br />
-      Speech Generation
-      <TextToSpeech />
-      <br />
-      Transcribe Audio
-      <SpeechToText />
-      <br />
-      Identify Text
+
+      <Text>Identify Text</Text>
       <TextIdentification />
-      <br />
-      Identify Entities
+
+      <Text>Identify Entities</Text>
       <EntityIdentification />
-      <br />
-      Identify Entities (Advanced)
-      <PredictionsUpload />
-      <br />
-      Label Objects
+
+      <Text>Label Objects</Text>
       <LabelsIdentification />
-      <br />
-      Text Interpretation
+
+      <Text>Text Interpretation</Text>
       <TextInterpretation />
     </View>
   );
@@ -460,6 +451,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  Text: {},
+  text: {},
   audioRecorder: {},
 });

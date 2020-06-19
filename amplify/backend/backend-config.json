@@ -12,6 +12,16 @@
 			"service": "Rekognition",
 			"dependsOn": [],
 			"identifyType": "identifyEntities"
+		},
+		"interpretText716c6b05": {
+			"providerPlugin": "awscloudformation",
+			"service": "Comprehend",
+			"interpretType": "interpretText"
+		},
+		"translateText": {
+			"providerPlugin": "awscloudformation",
+			"service": "Translate",
+			"convertType": "translateText"
 		}
 	}
 }
