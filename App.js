@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View, Button, Image } from "react-native";
+import { withAuthenticator } from "aws-amplify-react-native";
+
 import Amplify, { Storage, Predictions } from "aws-amplify";
 import awsconfig from "./aws-exports";
 import { AmazonAIPredictionsProvider } from "@aws-amplify/predictions";
@@ -111,12 +113,12 @@ function EntityIdentification() {
   }
 
   return (
-    <View style={styles.text}>
+    <View>
       <View>
         <Text>Entity identification</Text>
         <Button onPress={identifyFromFile} title="Entity f" />
         <Text>{response}</Text>
-        {src && <Image src={src}></Image>}
+        <Image source="https://img.com"></Image>
       </View>
     </View>
   );
@@ -177,7 +179,7 @@ function LabelsIdentification() {
   return (
     <View style={styles.text}>
       <View>
-        <h3>Labels identification</h3>
+        <Text>Labels identification</Text>
         <Button onPress={identifyFromFile} title="Labels l" />
         <Text>{response}</Text>
       </View>
@@ -389,9 +391,7 @@ function TextInterpretation() {
   const [response, setResponse] = useState(
     "Input some text and click enter to test"
   );
-  const [textToInterpret, setTextToInterpret] = useState(
-    "write some text here to interpret"
-  );
+  const [textToInterpret, setTextToInterpret] = useState("");
 
   function interpretFromPredictions() {
     Predictions.interpret({
@@ -414,7 +414,12 @@ function TextInterpretation() {
     <View style={styles.text}>
       <View>
         <Text>Text interpretation</Text>
-        <TextInput value={textToInterpret} onChange={setText}></TextInput>
+        <TextInput
+          value={textToInterpret}
+          onChange={setText}
+          placeholder="write some text here to interpret"
+          style={{ borderColor: "black", borderWidth: 2 }}
+        ></TextInput>
         <Button onPress={interpretFromPredictions} title="test" />
         <Text>{response}</Text>
       </View>
@@ -422,7 +427,7 @@ function TextInterpretation() {
   );
 }
 
-export default function App() {
+function App() {
   return (
     <View style={styles.container}>
       <Text>Translate Text</Text>
@@ -454,3 +459,5 @@ const styles = StyleSheet.create({
   text: {},
   audioRecorder: {},
 });
+
+export default withAuthenticator(App);
