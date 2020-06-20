@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View, Button, Image } from "react-native";
 import { withAuthenticator } from "aws-amplify-react-native";
-
+import DocumentPicker from "react-native-document-picker";
+import ImagePicker from "react-native-image-picker";
 import Amplify, { Storage, Predictions } from "aws-amplify";
 import awsconfig from "./aws-exports";
 import { AmazonAIPredictionsProvider } from "@aws-amplify/predictions";
@@ -18,18 +19,14 @@ function TextIdentification() {
 
   function identifyFromFile(event) {
     setResponse("identifiying text...");
-    const {
-      target: { files },
-    } = event;
-    const [file] = files || [];
-
-    if (!file) {
-      return;
-    }
+    const options = {};
+    ImagePicker.launchImageLibrary(options, (response) => {
+      console.log("response", response);
+    });
     Predictions.identify({
       text: {
         source: {
-          file,
+          res,
         },
         format: "PLAIN", // Available options "PLAIN", "FORM", "TABLE", "ALL"
       },
@@ -44,7 +41,7 @@ function TextIdentification() {
     <View style={styles.text}>
       <View>
         <Text>Text identification</Text>
-        <Button onPress={identifyFromFile} title="identify f" />
+        <Button onPress={identifyFromFile} title="Choose Image" />
         <Text>{response}</Text>
       </View>
     </View>
@@ -456,7 +453,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  text: {},
+  text: { padding: 20, fontWeight: "Bold", fontSize: 20 },
   audioRecorder: {},
 });
 
