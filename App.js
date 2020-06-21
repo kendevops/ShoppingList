@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View, Button, Image } from "react-native";
 import { withAuthenticator } from "aws-amplify-react-native";
 import DocumentPicker from "react-native-document-picker";
-import ImagePicker from "react-native-image-picker";
+// import ImagePicker from "react-native-image-picker";
+import * as ImagePicker from "expo-image-picker";
 import Amplify, { Storage, Predictions } from "aws-amplify";
 import awsconfig from "./aws-exports";
 import { AmazonAIPredictionsProvider } from "@aws-amplify/predictions";
@@ -17,16 +18,23 @@ function TextIdentification() {
     "You can add a photo by uploading direcly from the app "
   );
 
-  function identifyFromFile(event) {
+  async function identifyFromFile() {
     setResponse("identifiying text...");
-    const options = {};
-    ImagePicker.launchImageLibrary(options, (response) => {
-      console.log("response", response);
-    });
+
+    let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+
+    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    console.log(pickerResult);
+
     Predictions.identify({
       text: {
         source: {
-          res,
+          pickerResult,
         },
         format: "PLAIN", // Available options "PLAIN", "FORM", "TABLE", "ALL"
       },
@@ -453,7 +461,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  text: { padding: 20, fontWeight: "Bold", fontSize: 20 },
+  // text: { padding: 20, fontWeight: "bold", fontSize: 20 },
   audioRecorder: {},
 });
 
