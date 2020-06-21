@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View, Button, Image } from "react-native";
 import { withAuthenticator } from "aws-amplify-react-native";
-
+import DocumentPicker from "react-native-document-picker";
+// import ImagePicker from "react-native-image-picker";
+import * as ImagePicker from "expo-image-picker";
 import Amplify, { Storage, Predictions } from "aws-amplify";
 import awsconfig from "./aws-exports";
 import { AmazonAIPredictionsProvider } from "@aws-amplify/predictions";
@@ -15,21 +17,29 @@ function TextIdentification() {
   const [response, setResponse] = useState(
     "You can add a photo by uploading direcly from the app "
   );
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  function identifyFromFile(event) {
+  async function identifyFromFile() {
     setResponse("identifiying text...");
-    const {
-      target: { files },
-    } = event;
-    const [file] = files || [];
 
-    if (!file) {
+    let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
       return;
     }
+
+    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    console.log(pickerResult);
+    if (pickerResult.cancelled === true) {
+      return;
+    }
+    setSelectedImage({ localUri: pickerResult.uri });
+
     Predictions.identify({
       text: {
         source: {
-          file,
+          selectedImage,
         },
         format: "PLAIN", // Available options "PLAIN", "FORM", "TABLE", "ALL"
       },
@@ -44,7 +54,7 @@ function TextIdentification() {
     <View style={styles.text}>
       <View>
         <Text>Text identification</Text>
-        <Button onPress={identifyFromFile} title="identify f" />
+        <Button onPress={identifyFromFile} title="Choose Image" />
         <Text>{response}</Text>
       </View>
     </View>
@@ -456,7 +466,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  text: {},
+  // text: { padding: 20, fontWeight: "bold", fontSize: 20 },
   audioRecorder: {},
 });
 

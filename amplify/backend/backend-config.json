@@ -22,6 +22,12 @@
 			"providerPlugin": "awscloudformation",
 			"service": "Translate",
 			"convertType": "translateText"
+		},
+		"identifyText": {
+			"providerPlugin": "awscloudformation",
+			"service": "RekognitionAndTextract",
+			"dependsOn": [],
+			"identifyType": "identifyText"
 		}
 	}
 }
