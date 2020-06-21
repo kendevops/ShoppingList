@@ -17,6 +17,7 @@ function TextIdentification() {
   const [response, setResponse] = useState(
     "You can add a photo by uploading direcly from the app "
   );
+  const [selectedImage, setSelectedImage] = useState(null);
 
   async function identifyFromFile() {
     setResponse("identifiying text...");
@@ -30,11 +31,15 @@ function TextIdentification() {
 
     let pickerResult = await ImagePicker.launchImageLibraryAsync();
     console.log(pickerResult);
+    if (pickerResult.cancelled === true) {
+      return;
+    }
+    setSelectedImage({ localUri: pickerResult.uri });
 
     Predictions.identify({
       text: {
         source: {
-          pickerResult,
+          selectedImage,
         },
         format: "PLAIN", // Available options "PLAIN", "FORM", "TABLE", "ALL"
       },
