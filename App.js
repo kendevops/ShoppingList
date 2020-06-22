@@ -63,23 +63,33 @@ function TextIdentification() {
 
 function EntityIdentification() {
   const [response, setResponse] = useState("Click upload for test ");
-  const [src, setSrc] = useState("");
+  const [image, setImage] = useState(null);
 
-  function identifyFromFile(event) {
+  async function identifyFromFile() {
     setResponse("searching...");
+    let image = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-    const {
-      target: { files },
-    } = event;
-    const [file] = files || [];
+    console.log(image);
 
-    if (!file) {
-      return;
+    if (!image.cancelled) {
+      setImage(image.uri);
     }
+
+    // result = event;
+
+    // const [file] = result || [];
+
+    // // if (!file) {
+    // //   return;
+    // }
     Predictions.identify({
       entities: {
         source: {
-          file,
+          image,
         },
         /**For using the Identify Entities advanced features, enable collection:true and comment out celebrityDetection
          * Then after you upload a face with PredictionsUpload you'll be able to run this again
@@ -114,7 +124,7 @@ function EntityIdentification() {
               public: imageId,
             },
             level: "public",
-          }).then(setSrc); // this should be better but it works
+          }).then(setImage); // this should be better but it works
         }
         console.log({ entities });
         setResponse(names);
@@ -126,58 +136,67 @@ function EntityIdentification() {
     <View>
       <View>
         <Text>Entity identification</Text>
-        <Button onPress={identifyFromFile} title="Entity f" />
+        <Button onPress={identifyFromFile} title="Entity Identification" />
         <Text>{response}</Text>
-        <Image source="https://img.com"></Image>
+        {image && (
+          <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+        )}
       </View>
     </View>
   );
 }
 
-// function PredictionsUpload() {
-//   /* This is Identify Entities Advanced feature
-//    * This will upload user images to the appropriate bucket prefix
-//    * and a Lambda trigger will automatically perform indexing
-//    */
-//   function upload(event) {
-//     const {
-//       target: { files },
-//     } = event;
-//     const [file] = files || [];
-//     Storage.put(file.name, file, {
-//       level: "protected",
-//       customPrefix: {
-//         protected: "protected/predictions/index-faces/",
-//       },
-//     });
-//   }
+function PredictionsUpload() {
+  /* This is Identify Entities Advanced feature
+   * This will upload user images to the appropriate bucket prefix
+   * and a Lambda trigger will automatically perform indexing
+   */
+  function upload(event) {
+    let image = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!image.cancelled) {
+      setImage(image.uri);
+    }
+    Storage.put(image.name, image, {
+      level: "protected",
+      customPrefix: {
+        protected: "protected/predictions/index-faces/",
+      },
+    });
+  }
 
-//   return (
-//     <View style={styles.text}>
-//       <View>
-//         <Text>Upload to predictions s3</Text>
-//         <Button onChange={upload}></Button>
-//       </View>
-//     </View>
-//   );
-// }
+  return (
+    <View style={styles.text}>
+      <View>
+        <Text>Upload to predictions s3</Text>
+        <Button onPress={upload} title="Upload" />
+      </View>
+    </View>
+  );
+}
 
 function LabelsIdentification() {
   const [response, setResponse] = useState("Click upload for test ");
 
-  function identifyFromFile(event) {
-    const {
-      target: { files },
-    } = event;
-    const [file] = files || [];
+  function identifyFromFile() {
+    let image = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-    if (!file) {
-      return;
+    console.log(image);
+
+    if (!image.cancelled) {
+      setImage(image.uri);
     }
     Predictions.identify({
       labels: {
         source: {
-          file,
+          image,
         },
         type: "ALL", // "LABELS" will detect objects , "UNSAFE" will detect if content is not safe, "ALL" will do both default on aws-exports.js
       },
@@ -190,7 +209,7 @@ function LabelsIdentification() {
     <View style={styles.text}>
       <View>
         <Text>Labels identification</Text>
-        <Button onPress={identifyFromFile} title="Labels l" />
+        <Button onPress={identifyFromFile} title="Label Identification" />
         <Text>{response}</Text>
       </View>
     </View>
@@ -448,6 +467,9 @@ function App() {
 
       <Text>Identify Entities</Text>
       <EntityIdentification />
+
+      Identify Entities (Advanced)
+      <PredictionsUpload />
 
       <Text>Label Objects</Text>
       <LabelsIdentification />
