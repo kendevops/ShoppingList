@@ -165,7 +165,7 @@ function EntityIdentification() {
 function LabelsIdentification() {
   const [response, setResponse] = useState("Click upload for test ");
 
-  function identifyFromFile(event) {
+  function identifyFromFile() {
     const {
       target: { files },
     } = event;
@@ -190,7 +190,7 @@ function LabelsIdentification() {
     <View style={styles.text}>
       <View>
         <Text>Labels identification</Text>
-        <Button onPress={identifyFromFile} title="Labels l" />
+        <Button onPress={identifyFromFile} title="Label Identification" />
         <Text>{response}</Text>
       </View>
     </View>
