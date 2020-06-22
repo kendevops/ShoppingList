@@ -152,11 +152,15 @@ function PredictionsUpload() {
    * and a Lambda trigger will automatically perform indexing
    */
   function upload(event) {
-    const {
-      target: { files },
-    } = event;
-    const [file] = files || [];
-    Storage.put(file.name, file, {
+    let image = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!image.cancelled) {
+      setImage(image.uri);
+    }
+    Storage.put(image.name, image, {
       level: "protected",
       customPrefix: {
         protected: "protected/predictions/index-faces/",
@@ -168,7 +172,7 @@ function PredictionsUpload() {
     <View style={styles.text}>
       <View>
         <Text>Upload to predictions s3</Text>
-        <Button onChange={upload}></Button>
+        <Button onPress={upload} title="Upload" />
       </View>
     </View>
   );
@@ -463,6 +467,9 @@ function App() {
 
       <Text>Identify Entities</Text>
       <EntityIdentification />
+
+      Identify Entities (Advanced)
+      <PredictionsUpload />
 
       <Text>Label Objects</Text>
       <LabelsIdentification />
