@@ -183,29 +183,29 @@ function EntityIdentification() {
 function LabelsIdentification() {
   const [response, setResponse] = useState("Click upload for test ");
 
-  // async function identifyFromFile() {
-  //   let image = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   });
+  async function identifyFromFile() {
+    let image = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-  //   console.log(image);
+    console.log(image);
 
-  //   if (!image.cancelled) {
-  //     setImage(image.uri);
-  //   }
-  //   Predictions.identify({
-  //     labels: {
-  //       source: {
-  //         image,
-  //       },
-  //       type: "ALL", // "LABELS" will detect objects , "UNSAFE" will detect if content is not safe, "ALL" will do both default on aws-exports.js
-  //     },
-  //   })
-  //     .then((result) => setResponse(JSON.stringify(result, null, 2)))
-  //     .catch((err) => setResponse(JSON.stringify(err, null, 2)));
-  // }
+    if (!image.cancelled) {
+      setImage(image.uri);
+    }
+    Predictions.identify({
+      labels: {
+        source: {
+          image,
+        },
+        type: "ALL", // "LABELS" will detect objects , "UNSAFE" will detect if content is not safe, "ALL" will do both default on aws-exports.js
+      },
+    })
+      .then((result) => setResponse(JSON.stringify(result, null, 2)))
+      .catch((err) => setResponse(JSON.stringify(err, null, 2)));
+  }
 
   return (
     <View style={styles.text}>
@@ -328,58 +328,58 @@ function LabelsIdentification() {
 //   );
 // }
 
-// function TextToSpeech() {
-//   const [response, setResponse] = useState("...");
-//   const [textToGenerateSpeech, setTextToGenerateSpeech] = useState(
-//     "write to speech"
-//   );
+function TextToSpeech() {
+  const [response, setResponse] = useState("...");
+  const [textToGenerateSpeech, setTextToGenerateSpeech] = useState(
+    "write to speech"
+  );
 
-//   function generateTextToSpeech() {
-//     setResponse("Generating audio...");
-//     Predictions.convert({
-//       textToSpeech: {
-//         source: {
-//           text: textToGenerateSpeech,
-//         },
-//         voiceId: "Amy", // default configured on aws-exports.js
-//         // list of different options are here https://docs.aws.amazon.com/polly/latest/dg/voicelist.html
-//       },
-//     })
-//       .then((result) => {
-//         let AudioContext = window.AudioContext || window.webkitAudioContext;
-//         console.log({ AudioContext });
-//         const audioCtx = new AudioContext();
-//         const source = audioCtx.createBufferSource();
-//         audioCtx.decodeAudioData(
-//           result.audioStream,
-//           (buffer) => {
-//             source.buffer = buffer;
-//             source.connect(audioCtx.destination);
-//             source.start(0);
-//           },
-//           (err) => console.log({ err })
-//         );
+  function generateTextToSpeech() {
+    setResponse("Generating audio...");
+    Predictions.convert({
+      textToSpeech: {
+        source: {
+          text: textToGenerateSpeech,
+        },
+        voiceId: "Amy", // default configured on aws-exports.js
+        // list of different options are here https://docs.aws.amazon.com/polly/latest/dg/voicelist.html
+      },
+    })
+      .then((result) => {
+        let AudioContext = window.AudioContext || window.webkitAudioContext;
+        console.log({ AudioContext });
+        const audioCtx = new AudioContext();
+        const source = audioCtx.createBufferSource();
+        audioCtx.decodeAudioData(
+          result.audioStream,
+          (buffer) => {
+            source.buffer = buffer;
+            source.connect(audioCtx.destination);
+            source.start(0);
+          },
+          (err) => console.log({ err })
+        );
 
-//         setResponse(`Generation completed, press play`);
-//       })
-//       .catch((err) => setResponse(err));
-//   }
+        setResponse(`Generation completed, press play`);
+      })
+      .catch((err) => setResponse(err));
+  }
 
-//   function setText(event) {
-//     setTextToGenerateSpeech(event.target.value);
-//   }
+  function setText(event) {
+    setTextToGenerateSpeech(event.target.value);
+  }
 
-//   return (
-//     <View style={styles.text}>
-//       <View>
-//         <Text>Text To Speech</Text>
-//         <TextInput value={textToGenerateSpeech} onChange={setText}></TextInput>
-//         <Button onClick={generateTextToSpeech}>Text to Speech</Button>
-//         <Text>{response}</Text>
-//       </View>
-//     </View>
-//   );
-// }
+  return (
+    <View style={styles.text}>
+      <View>
+        <Text>Text To Speech</Text>
+        <TextInput value={textToGenerateSpeech} onChange={setText}></TextInput>
+        <Button onPress={generateTextToSpeech}>Text to Speech</Button>
+        <Text>{response}</Text>
+      </View>
+    </View>
+  );
+}
 
 function TextTranslation() {
   const [response, setResponse] = useState(
@@ -465,7 +465,12 @@ function App() {
       <TextIdentification />
       <Text>Identify Entities</Text>
       <EntityIdentification />
-
+      <Text>Text Interpretation</Text>
+      <TextInterpretation />
+      <Text>Translate Text</Text>
+      <TextTranslation />
+      <Text>Label Objects</Text>
+      <LabelsIdentification />
     </View>
   );
 }
