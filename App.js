@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, TextInput, View, Button, Image } from "react-native";
 import { withAuthenticator } from "aws-amplify-react-native";
 import DocumentPicker from "react-native-document-picker";
@@ -41,7 +41,7 @@ function TextIdentification() {
         source: {
           selectedImage,
         },
-        format: "PLAIN", // Available options "PLAIN", "FORM", "TABLE", "ALL"
+        format: "ALL", // Available options "PLAIN", "FORM", "TABLE", "ALL"
       },
     })
       .then(({ text: { fullText } }) => {
@@ -79,13 +79,6 @@ function EntityIdentification() {
       setImage(image.uri);
     }
 
-    // result = event;
-
-    // const [file] = result || [];
-
-    // // if (!file) {
-    // //   return;
-    // }
     Predictions.identify({
       entities: {
         source: {
@@ -131,7 +124,6 @@ function EntityIdentification() {
       })
       .catch((err) => console.log(err));
   }
-
   return (
     <View>
       <View>
@@ -146,64 +138,74 @@ function EntityIdentification() {
   );
 }
 
-function PredictionsUpload() {
-  /* This is Identify Entities Advanced feature
-   * This will upload user images to the appropriate bucket prefix
-   * and a Lambda trigger will automatically perform indexing
-   */
-  function upload(event) {
-    let image = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      aspect: [4, 3],
-      quality: 1,
-    });
-    if (!image.cancelled) {
-      setImage(image.uri);
-    }
-    Storage.put(image.name, image, {
-      level: "protected",
-      customPrefix: {
-        protected: "protected/predictions/index-faces/",
-      },
-    });
-  }
+// function PredictionsUpload() {
+//   /* This is Identify Entities Advanced feature
+//    * This will upload user images to the appropriate bucket prefix
+//    * and a Lambda trigger will automatically perform indexing
+//    */
+//   const [image, setImage] = useState(null);
 
-  return (
-    <View style={styles.text}>
-      <View>
-        <Text>Upload to predictions s3</Text>
-        <Button onPress={upload} title="Upload" />
-      </View>
-    </View>
-  );
-}
+//   function upload() {
+//     let pix = ImagePicker.launchImageLibraryAsync({
+//       mediaTypes: ImagePicker.MediaTypeOptions.All,
+//       aspect: [4, 3],
+//       quality: 1,
+//     });
+//     console.log(pix);
+//     if (!pix.cancelled) {
+//       setImage(pix.uri);
+//     }
+//     console.log(image);
+//     useEffect(() => {
+//       let isMounted = true;
+//       Storage.put(image, pix, {
+//         level: "protected",
+//         customPrefix: {
+//           protected: "protected/predictions/index-faces/",
+//         },
+//       });
+//       return () => {
+//         isMounted = false;
+//       };
+//     });
+//   }
+
+//   return (
+//     <View style={styles.text}>
+//       <View>
+//         <Text>Upload to predictions s3</Text>
+//         <Button onPress={upload} title="Upload" />
+//       </View>
+//     </View>
+//   );
+// }
 
 function LabelsIdentification() {
   const [response, setResponse] = useState("Click upload for test ");
 
-  function identifyFromFile() {
-    let image = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      aspect: [4, 3],
-      quality: 1,
-    });
+  // async function identifyFromFile() {
+  //   let image = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   });
 
-    console.log(image);
+  //   console.log(image);
 
-    if (!image.cancelled) {
-      setImage(image.uri);
-    }
-    Predictions.identify({
-      labels: {
-        source: {
-          image,
-        },
-        type: "ALL", // "LABELS" will detect objects , "UNSAFE" will detect if content is not safe, "ALL" will do both default on aws-exports.js
-      },
-    })
-      .then((result) => setResponse(JSON.stringify(result, null, 2)))
-      .catch((err) => setResponse(JSON.stringify(err, null, 2)));
-  }
+  //   if (!image.cancelled) {
+  //     setImage(image.uri);
+  //   }
+  //   Predictions.identify({
+  //     labels: {
+  //       source: {
+  //         image,
+  //       },
+  //       type: "ALL", // "LABELS" will detect objects , "UNSAFE" will detect if content is not safe, "ALL" will do both default on aws-exports.js
+  //     },
+  //   })
+  //     .then((result) => setResponse(JSON.stringify(result, null, 2)))
+  //     .catch((err) => setResponse(JSON.stringify(err, null, 2)));
+  // }
 
   return (
     <View style={styles.text}>
@@ -459,23 +461,11 @@ function TextInterpretation() {
 function App() {
   return (
     <View style={styles.container}>
-      <Text>Translate Text</Text>
-      <TextTranslation />
-
       <Text>Identify Text</Text>
       <TextIdentification />
-
       <Text>Identify Entities</Text>
       <EntityIdentification />
 
-      Identify Entities (Advanced)
-      <PredictionsUpload />
-
-      <Text>Label Objects</Text>
-      <LabelsIdentification />
-
-      <Text>Text Interpretation</Text>
-      <TextInterpretation />
     </View>
   );
 }
