@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, TextInput, View, Button, Image } from "react-native";
 import { withAuthenticator } from "aws-amplify-react-native";
-import DocumentPicker from "react-native-document-picker";
+// import DocumentPicker from "react-native-document-picker";
 // import ImagePicker from "react-native-image-picker";
 import * as ImagePicker from "expo-image-picker";
+import * as Speech from "expo-speech";
+
 import Amplify, { Storage, Predictions } from "aws-amplify";
 import awsconfig from "./aws-exports";
 import { AmazonAIPredictionsProvider } from "@aws-amplify/predictions";
@@ -336,6 +338,7 @@ function TextToSpeech() {
 
   function generateTextToSpeech() {
     setResponse("Generating audio...");
+    Speech.speak();
     Predictions.convert({
       textToSpeech: {
         source: {
@@ -345,7 +348,7 @@ function TextToSpeech() {
         // list of different options are here https://docs.aws.amazon.com/polly/latest/dg/voicelist.html
       },
     })
-      .then((result) => {
+      .then(() => {
         let AudioContext = window.AudioContext || window.webkitAudioContext;
         console.log({ AudioContext });
         const audioCtx = new AudioContext();
@@ -471,6 +474,8 @@ function App() {
       <TextTranslation />
       <Text>Label Objects</Text>
       <LabelsIdentification />
+      Speech Generation
+      <TextToSpeech />
     </View>
   );
 }
