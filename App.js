@@ -338,7 +338,7 @@ function TextToSpeech() {
 
   function generateTextToSpeech() {
     setResponse("Generating audio...");
-    Speech.speak();
+    
     Predictions.convert({
       textToSpeech: {
         source: {
@@ -348,20 +348,21 @@ function TextToSpeech() {
         // list of different options are here https://docs.aws.amazon.com/polly/latest/dg/voicelist.html
       },
     })
-      .then(() => {
-        let AudioContext = window.AudioContext || window.webkitAudioContext;
-        console.log({ AudioContext });
-        const audioCtx = new AudioContext();
-        const source = audioCtx.createBufferSource();
-        audioCtx.decodeAudioData(
-          result.audioStream,
-          (buffer) => {
-            source.buffer = buffer;
-            source.connect(audioCtx.destination);
-            source.start(0);
-          },
-          (err) => console.log({ err })
-        );
+      .then((result) => {
+        // let AudioContext = window.AudioContext || window.webkitAudioContext;
+        // console.log({ AudioContext });
+        // const audioCtx = new AudioContext();
+        // const source = audioCtx.createBufferSource();
+        // audioCtx.decodeAudioData(
+        //   result.audioStream,
+        //   (buffer) => {
+        //     source.buffer = buffer;
+        //     source.connect(audioCtx.destination);
+        //     source.start(0);
+        //   },
+        //   (err) => console.log({ err })
+        // );
+        Speech.speak(result);
 
         setResponse(`Generation completed, press play`);
       })
@@ -376,7 +377,7 @@ function TextToSpeech() {
     <View style={styles.text}>
       <View>
         <Text>Text To Speech</Text>
-        <TextInput value={textToGenerateSpeech} onChange={setText}></TextInput>
+        <TextInput value={textToGenerateSpeech} onChangeText={setText}></TextInput>
         <Button onPress={generateTextToSpeech}>Text to Speech</Button>
         <Text>{response}</Text>
       </View>
