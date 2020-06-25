@@ -330,15 +330,15 @@ function LabelsIdentification() {
 //   );
 // }
 
-function TextToSpeech() {
+const TextToSpeech = () => {
   const [response, setResponse] = useState("...");
   const [textToGenerateSpeech, setTextToGenerateSpeech] = useState(
     "write to speech"
   );
 
-  function generateTextToSpeech() {
+  const generateTextToSpeech = () => {
     setResponse("Generating audio...");
-    
+    console.log("Mounted");
     Predictions.convert({
       textToSpeech: {
         source: {
@@ -349,41 +349,35 @@ function TextToSpeech() {
       },
     })
       .then((result) => {
-        // let AudioContext = window.AudioContext || window.webkitAudioContext;
-        // console.log({ AudioContext });
-        // const audioCtx = new AudioContext();
-        // const source = audioCtx.createBufferSource();
-        // audioCtx.decodeAudioData(
-        //   result.audioStream,
-        //   (buffer) => {
-        //     source.buffer = buffer;
-        //     source.connect(audioCtx.destination);
-        //     source.start(0);
-        //   },
-        //   (err) => console.log({ err })
-        // );
-        Speech.speak(result);
-
+        console.log(result);
+        var audio = new Audio();
+        audio.src = result.speech.url;
+        audio.play();
         setResponse(`Generation completed, press play`);
       })
       .catch((err) => setResponse(err));
-  }
+  };
 
-  function setText(event) {
-    setTextToGenerateSpeech(event.target.value);
-  }
+  const setText = () => {
+    setTextToGenerateSpeech(value);
+  };
 
   return (
     <View style={styles.text}>
       <View>
         <Text>Text To Speech</Text>
-        <TextInput value={textToGenerateSpeech} onChangeText={setText}></TextInput>
-        <Button onPress={generateTextToSpeech}>Text to Speech</Button>
+        <TextInput
+          value={textToGenerateSpeech}
+          onChangeText={(textToGenerateSpeech) =>
+            setTextToGenerateSpeech(textToGenerateSpeech)
+          }
+        ></TextInput>
+        <Button onPress={generateTextToSpeech} title="Text to Speech" />
         <Text>{response}</Text>
       </View>
     </View>
   );
-}
+};
 
 function TextTranslation() {
   const [response, setResponse] = useState(
@@ -475,7 +469,7 @@ function App() {
       <TextTranslation />
       <Text>Label Objects</Text>
       <LabelsIdentification />
-      Speech Generation
+      <Text>Speech Generation</Text>
       <TextToSpeech />
     </View>
   );
