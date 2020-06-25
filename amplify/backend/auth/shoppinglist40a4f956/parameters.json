@@ -1,6 +1,6 @@
 {
     "identityPoolName": "shoppinglist40a4f956_identitypool_40a4f956",
-    "allowUnauthenticatedIdentities": true,
+    "allowUnauthenticatedIdentities": false,
     "resourceNameTruncated": "shoppi40a4f956",
     "userPoolName": "shoppinglist40a4f956_userpool_40a4f956",
     "autoVerifiedAttributes": [

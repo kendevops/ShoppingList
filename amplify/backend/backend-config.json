@@ -29,5 +29,11 @@
 			"dependsOn": [],
 			"identifyType": "identifyText"
 		}
+	},
+	"storage": {
+		"s323e6a03c": {
+			"service": "S3",
+			"providerPlugin": "awscloudformation"
+		}
 	}
 }
