@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, TextInput, View, Button, Image } from "react-native";
 import { withAuthenticator } from "aws-amplify-react-native";
-// import DocumentPicker from "react-native-document-picker";
-// import ImagePicker from "react-native-image-picker";
 import * as ImagePicker from "expo-image-picker";
 
 import Amplify, { Storage, Predictions } from "aws-amplify";
