@@ -137,47 +137,47 @@ function EntityIdentification() {
   );
 }
 
-// function PredictionsUpload() {
-//   /* This is Identify Entities Advanced feature
-//    * This will upload user images to the appropriate bucket prefix
-//    * and a Lambda trigger will automatically perform indexing
-//    */
-//   const [image, setImage] = useState(null);
+function PredictionsUpload() {
+  /* This is Identify Entities Advanced feature
+   * This will upload user images to the appropriate bucket prefix
+   * and a Lambda trigger will automatically perform indexing
+   */
+  const [image, setImage] = useState(null);
 
-//   function upload() {
-//     let pix = ImagePicker.launchImageLibraryAsync({
-//       mediaTypes: ImagePicker.MediaTypeOptions.All,
-//       aspect: [4, 3],
-//       quality: 1,
-//     });
-//     console.log(pix);
-//     if (!pix.cancelled) {
-//       setImage(pix.uri);
-//     }
-//     console.log(image);
-//     useEffect(() => {
-//       let isMounted = true;
-//       Storage.put(image, pix, {
-//         level: "protected",
-//         customPrefix: {
-//           protected: "protected/predictions/index-faces/",
-//         },
-//       });
-//       return () => {
-//         isMounted = false;
-//       };
-//     });
-//   }
+  function upload() {
+    let pix = ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    console.log(pix);
+    if (!pix.cancelled) {
+      setImage(pix.uri);
+    }
+    console.log(image);
+    useEffect(() => {
+      let isMounted = true;
+      Storage.put(image, pix, {
+        level: "protected",
+        customPrefix: {
+          protected: "protected/predictions/index-faces/",
+        },
+      });
+      return () => {
+        isMounted = false;
+      };
+    });
+  }
 
-//   return (
-//     <View style={styles.text}>
-//       <View>
-//         <Text>Upload to predictions s3</Text>
-//         <Button onPress={upload} title="Upload" />
-//       </View>
-//     </View>
-//   );
-// }
+  return (
+    <View style={styles.text}>
+      <View>
+        <Text>Upload to predictions s3</Text>
+        <Button onPress={upload} title="Upload" />
+      </View>
+    </View>
+  );
+}
 
 function LabelsIdentification() {
   const [response, setResponse] = useState("Click upload for test ");
