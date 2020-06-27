@@ -28,10 +28,28 @@
 			"service": "RekognitionAndTextract",
 			"dependsOn": [],
 			"identifyType": "identifyText"
+		},
+		"speechGenerator030c6ac6": {
+			"providerPlugin": "awscloudformation",
+			"service": "Polly",
+			"convertType": "speechGenerator"
+		},
+		"identifyLabelsb5125f7d": {
+			"providerPlugin": "awscloudformation",
+			"service": "Rekognition",
+			"dependsOn": [],
+			"identifyType": "identifyLabels"
+		}
+	},
+	"hosting": {
+		"amplifyhosting": {
+			"service": "amplifyhosting",
+			"providerPlugin": "awscloudformation",
+			"type": "manual"
 		}
 	},
 	"storage": {
-		"s323e6a03c": {
+		"s3db3dae3f": {
 			"service": "S3",
 			"providerPlugin": "awscloudformation"
 		}

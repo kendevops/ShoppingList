@@ -155,17 +155,18 @@ function PredictionsUpload() {
       setImage(pix.uri);
     }
     console.log(image);
-    useEffect(() => {
-      let isMounted = true;
-      Storage.put(image, pix, {
-        level: "protected",
-        customPrefix: {
-          protected: "protected/predictions/index-faces/",
-        },
-      });
-      return () => {
-        isMounted = false;
-      };
+    // useEffect(() => {
+    //   let isMounted = true;
+
+    //   return () => {
+    //     isMounted = false;
+    //   };
+    // });
+    Storage.put(image, pix, {
+      level: "protected",
+      customPrefix: {
+        protected: "protected/predictions/index-faces/",
+      },
     });
   }
 
@@ -478,6 +479,8 @@ function App() {
       <TextIdentification />
       <Text>Identify Entities</Text>
       <EntityIdentification />
+      <Text>Identify Entities (Advanced)</Text>
+      <PredictionsUpload />
       <Text>Text Interpretation</Text>
       <TextInterpretation />
       <Text>Translate Text</Text>
