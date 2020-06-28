@@ -193,29 +193,26 @@ function PredictionsUpload() {
 function LabelsIdentification() {
   const [response, setResponse] = useState("Click upload for test ");
 
-  function dataURLtoFile(dataurl, filename) {
-    var arr = dataurl.split(","),
-      mime = arr[0].match(/:(.*?);/)[1],
-      bstr = atob(arr[1]),
-      n = bstr.length,
-      u8arr = new Uint8Array(n);
-
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-
-    return new File([u8arr], filename, { type: mime });
-  }
-
   async function identifyFromFile() {
     let image = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      aspect: [4, 3],
-      quality: 1,
     });
 
+    function dataURLtoFile(dataurl, filename) {
+      var arr = dataurl.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+
+      return new File([u8arr], filename, { type: mime });
+    }
+
     const file = dataURLtoFile(image.uri);
-    console.log(file);
 
     Predictions.identify({
       labels: {
@@ -225,7 +222,6 @@ function LabelsIdentification() {
         type: "ALL", // "LABELS" will detect objects , "UNSAFE" will detect if content is not safe, "ALL" will do both default on aws-exports.js
       },
     }).then((result) => {
-      console.log(result);
       return setResponse(JSON.stringify(result, null, 2));
     });
   }
@@ -362,7 +358,7 @@ const TextToSpeech = () => {
 
   const generateTextToSpeech = () => {
     setResponse("Generating audio...");
-    console.log("Mounted");
+
     Predictions.convert({
       textToSpeech: {
         source: {
@@ -373,16 +369,15 @@ const TextToSpeech = () => {
       },
     })
       .then((result) => {
-        console.log(result);
-        var audio = new Audio();
+        const audio = new Audio();
         audio.src = result.speech.url;
         audio.play();
-        setResponse(`Generation completed, press play`);
+        setResponse(`Generation completed`);
       })
       .catch((err) => setResponse(err));
   };
 
-  const setText = () => {
+  const setText = (value) => {
     setTextToGenerateSpeech(value);
   };
 
@@ -390,10 +385,8 @@ const TextToSpeech = () => {
     <View style={styles.text}>
       <View>
         <TextInput
-          value={textToGenerateSpeech}
-          onChangeText={(textToGenerateSpeech) =>
-            setTextToGenerateSpeech(textToGenerateSpeech)
-          }
+          placeholder={textToGenerateSpeech}
+          onChangeText={setText}
           style={styles.input}
         ></TextInput>
         <Button
