@@ -7,8 +7,6 @@ import Amplify, { Storage, Predictions } from "aws-amplify";
 import awsconfig from "./aws-exports";
 import { AmazonAIPredictionsProvider } from "@aws-amplify/predictions";
 
-// import mic from "microphone-stream";
-
 Amplify.configure(awsconfig);
 Amplify.addPluggable(new AmazonAIPredictionsProvider());
 
@@ -75,16 +73,28 @@ function EntityIdentification() {
       quality: 1,
     });
 
-    console.log(image);
+    function dataURLtoFile(dataurl, filename) {
+      var arr = dataurl.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
 
-    if (!image.cancelled) {
-      setImage(image.uri);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+
+      return new File([u8arr], filename, { type: mime });
     }
+
+    console.log(image);
+    const file = dataURLtoFile(image.uri);
+    console.log(file);
 
     Predictions.identify({
       entities: {
         source: {
-          image,
+          file,
         },
         /**For using the Identify Entities advanced features, enable collection:true and comment out celebrityDetection
          * Then after you upload a face with PredictionsUpload you'll be able to run this again
@@ -161,13 +171,7 @@ function PredictionsUpload() {
       setImage(pix.uri);
     }
     console.log(image);
-    // useEffect(() => {
-    //   let isMounted = true;
 
-    //   return () => {
-    //     isMounted = false;
-    //   };
-    // });
     Storage.put(image, pix, {
       level: "protected",
       customPrefix: {
@@ -180,7 +184,7 @@ function PredictionsUpload() {
     <View style={styles.text}>
       <View>
         <Text>Upload to predictions s3</Text>
-        <Button onPress={upload} title="Upload" style={styles.button}/>
+        <Button onPress={upload} title="Upload" style={styles.button} />
       </View>
     </View>
   );
@@ -210,14 +214,9 @@ function LabelsIdentification() {
       quality: 1,
     });
 
-    console.log(image);
-    var file = dataURLtoFile(image.uri);
+    const file = dataURLtoFile(image.uri);
     console.log(file);
 
-    // if (!image.cancelled) {
-    //   setImage(image.uri);
-    // }
-    // let newImage = image.uri;
     Predictions.identify({
       labels: {
         source: {
@@ -234,7 +233,11 @@ function LabelsIdentification() {
   return (
     <View style={styles.text}>
       <View>
-        <Button onPress={identifyFromFile} title="Label Identification" />
+        <Button
+          onPress={identifyFromFile}
+          title="Label Identification"
+          style={styles.button}
+        />
         <Text>{response}</Text>
       </View>
     </View>
@@ -393,7 +396,11 @@ const TextToSpeech = () => {
           }
           style={styles.input}
         ></TextInput>
-        <Button onPress={generateTextToSpeech} title="Text to Speech" />
+        <Button
+          onPress={generateTextToSpeech}
+          title="Text to Speech"
+          style={styles.button}
+        />
         <Text>{response}</Text>
       </View>
     </View>
@@ -433,7 +440,7 @@ function TextTranslation() {
           onChange={setText}
           style={styles.input}
         />
-        <Button onPress={translate} title="Translate" />
+        <Button onPress={translate} title="Translate" style={styles.button} />
         <Text>{response}</Text>
       </View>
     </View>
