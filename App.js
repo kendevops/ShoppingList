@@ -52,7 +52,11 @@ function TextIdentification() {
   return (
     <View style={styles.text}>
       <View>
-        <Button onPress={identifyFromFile} title="Choose Image" />
+        <Button
+          onPress={identifyFromFile}
+          title="Choose Image"
+          style={styles.button}
+        />
         <Text>{response}</Text>
       </View>
     </View>
@@ -125,7 +129,11 @@ function EntityIdentification() {
   return (
     <View>
       <View>
-        <Button onPress={identifyFromFile} title="Entity Identification" />
+        <Button
+          onPress={identifyFromFile}
+          title="Entity Identification"
+          style={styles.button}
+        />
         <Text>{response}</Text>
         {image && (
           <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
@@ -172,7 +180,7 @@ function PredictionsUpload() {
     <View style={styles.text}>
       <View>
         <Text>Upload to predictions s3</Text>
-        <Button onPress={upload} title="Upload" />
+        <Button onPress={upload} title="Upload" style={styles.button}/>
       </View>
     </View>
   );
