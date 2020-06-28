@@ -470,7 +470,11 @@ function TextInterpretation() {
           placeholder="write some text here to interpret"
           style={styles.input}
         />
-        <Button onPress={interpretFromPredictions} title="test" />
+        <Button
+          onPress={interpretFromPredictions}
+          title="test"
+          style={styles.button}
+        />
         <Text>{response}</Text>
       </View>
     </View>
@@ -512,6 +516,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     margin: 10,
+  },
+
+  button: {
+    width: "80%",
+    padding: 10,
+    margin: 5,
   },
 
   // text: { padding: 20, fontWeight: "bold", fontSize: 20 },
