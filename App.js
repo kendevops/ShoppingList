@@ -14,7 +14,6 @@ function TextIdentification() {
   const [response, setResponse] = useState(
     "You can add a photo by uploading direcly from the app "
   );
-  const [selectedImage, setSelectedImage] = useState(null);
 
   async function identifyFromFile() {
     setResponse("identifiying text...");
@@ -27,16 +26,28 @@ function TextIdentification() {
     }
 
     let pickerResult = await ImagePicker.launchImageLibraryAsync();
-    console.log(pickerResult);
-    if (pickerResult.cancelled === true) {
-      return;
+
+    function dataURLtoFile(dataurl, filename) {
+      var arr = dataurl.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+
+      return new File([u8arr], filename, { type: mime });
     }
-    setSelectedImage({ localUri: pickerResult.uri });
+
+    const file = dataURLtoFile(pickerResult.uri);
+    console.log(file);
 
     Predictions.identify({
       text: {
         source: {
-          selectedImage,
+          file,
         },
         format: "ALL", // Available options "PLAIN", "FORM", "TABLE", "ALL"
       },
@@ -69,8 +80,6 @@ function EntityIdentification() {
     setResponse("searching...");
     let image = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      aspect: [4, 3],
-      quality: 1,
     });
 
     function dataURLtoFile(dataurl, filename) {
@@ -87,9 +96,7 @@ function EntityIdentification() {
       return new File([u8arr], filename, { type: mime });
     }
 
-    console.log(image);
     const file = dataURLtoFile(image.uri);
-    console.log(file);
 
     Predictions.identify({
       entities: {
@@ -104,7 +111,6 @@ function EntityIdentification() {
       },
     })
       .then((result) => {
-        console.log(result);
         const entities = result.entities;
         let imageId = "";
         let names = "";
@@ -158,21 +164,29 @@ function PredictionsUpload() {
    * This will upload user images to the appropriate bucket prefix
    * and a Lambda trigger will automatically perform indexing
    */
-  const [image, setImage] = useState(null);
 
   function upload() {
     let pix = ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      aspect: [4, 3],
-      quality: 1,
     });
-    console.log(pix);
-    if (!pix.cancelled) {
-      setImage(pix.uri);
-    }
-    console.log(image);
 
-    Storage.put(image, pix, {
+    function dataURLtoFile(dataurl, filename) {
+      var arr = dataurl.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+
+      return new File([u8arr], filename, { type: mime });
+    }
+
+    let file = dataURLtoFile(pix.uri);
+
+    Storage.put(file.name, file, {
       level: "protected",
       customPrefix: {
         protected: "protected/predictions/index-faces/",
@@ -221,9 +235,9 @@ function LabelsIdentification() {
         },
         type: "ALL", // "LABELS" will detect objects , "UNSAFE" will detect if content is not safe, "ALL" will do both default on aws-exports.js
       },
-    }).then((result) => {
-      return setResponse(JSON.stringify(result, null, 2));
-    });
+    })
+      .then((result) => setResponse(JSON.stringify(result, null, 2)))
+      .catch((err) => setResponse(JSON.stringify(err, null, 2)));
   }
 
   return (
