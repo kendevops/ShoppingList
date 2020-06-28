@@ -463,7 +463,6 @@ function TextInterpretation() {
   return (
     <View style={styles.text}>
       <View>
-        <Text>Text interpretation</Text>
         <TextInput
           value={textToInterpret}
           onChange={setText}
@@ -484,19 +483,19 @@ function TextInterpretation() {
 function App() {
   return (
     <View style={styles.container}>
-      <Text>Identify Text</Text>
+      <Text style={styles.renderText}>Identify Text</Text>
       <TextIdentification />
-      <Text>Identify Entities</Text>
+      <Text style={styles.renderText}>Identify Entities</Text>
       <EntityIdentification />
-      <Text>Identify Entities (Advanced)</Text>
+      <Text style={styles.renderText}>Identify Entities (Advanced)</Text>
       <PredictionsUpload />
-      <Text>Text Interpretation</Text>
+      <Text style={styles.renderText}>Text Interpretation</Text>
       <TextInterpretation />
-      <Text>Translate Text</Text>
+      <Text style={styles.renderText}>Translate Text</Text>
       <TextTranslation />
-      <Text>Label Objects</Text>
+      <Text style={styles.renderText}>Label Objects</Text>
       <LabelsIdentification />
-      <Text>Speech Generation</Text>
+      <Text style={styles.renderText}>Speech Generation</Text>
       <TextToSpeech />
     </View>
   );
@@ -511,7 +510,7 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    width: "100%",
+    width: "80%",
     borderColor: "black",
     borderWidth: 1,
     padding: 10,
@@ -522,6 +521,12 @@ const styles = StyleSheet.create({
     width: "80%",
     padding: 10,
     margin: 5,
+  },
+
+  renderText: {
+    textAlign: "center",
+    fontSize: 20,
+    padding: 10,
   },
 
   // text: { padding: 20, fontWeight: "bold", fontSize: 20 },
