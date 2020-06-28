@@ -52,7 +52,6 @@ function TextIdentification() {
   return (
     <View style={styles.text}>
       <View>
-        <Text>Text identification</Text>
         <Button onPress={identifyFromFile} title="Choose Image" />
         <Text>{response}</Text>
       </View>
@@ -126,7 +125,6 @@ function EntityIdentification() {
   return (
     <View>
       <View>
-        <Text>Entity identification</Text>
         <Button onPress={identifyFromFile} title="Entity Identification" />
         <Text>{response}</Text>
         {image && (
@@ -228,7 +226,6 @@ function LabelsIdentification() {
   return (
     <View style={styles.text}>
       <View>
-        <Text>Labels identification</Text>
         <Button onPress={identifyFromFile} title="Label Identification" />
         <Text>{response}</Text>
       </View>
@@ -381,7 +378,6 @@ const TextToSpeech = () => {
   return (
     <View style={styles.text}>
       <View>
-        <Text>Text To Speech</Text>
         <TextInput
           value={textToGenerateSpeech}
           onChangeText={(textToGenerateSpeech) =>
@@ -424,7 +420,6 @@ function TextTranslation() {
   return (
     <View style={styles.text}>
       <View>
-        <Text>Text Translation</Text>
         <TextInput
           value={textToTranslate}
           onChange={setText}
