@@ -387,6 +387,7 @@ const TextToSpeech = () => {
           onChangeText={(textToGenerateSpeech) =>
             setTextToGenerateSpeech(textToGenerateSpeech)
           }
+          style={styles.input}
         ></TextInput>
         <Button onPress={generateTextToSpeech} title="Text to Speech" />
         <Text>{response}</Text>
@@ -424,7 +425,11 @@ function TextTranslation() {
     <View style={styles.text}>
       <View>
         <Text>Text Translation</Text>
-        <TextInput value={textToTranslate} onChange={setText}></TextInput>
+        <TextInput
+          value={textToTranslate}
+          onChange={setText}
+          style={styles.input}
+        />
         <Button onPress={translate} title="Translate" />
         <Text>{response}</Text>
       </View>
@@ -463,8 +468,8 @@ function TextInterpretation() {
           value={textToInterpret}
           onChange={setText}
           placeholder="write some text here to interpret"
-          style={{ borderColor: "black", borderWidth: 2 }}
-        ></TextInput>
+          style={styles.input}
+        />
         <Button onPress={interpretFromPredictions} title="test" />
         <Text>{response}</Text>
       </View>
@@ -499,6 +504,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  input: {
+    width: "100%",
+    borderColor: "black",
+    borderWidth: 1,
+    padding: 10,
+    margin: 10,
   },
 
   // text: { padding: 20, fontWeight: "bold", fontSize: 20 },
