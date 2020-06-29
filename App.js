@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View, Button, Image } from "react-native";
 import { withAuthenticator } from "aws-amplify-react-native";
 import * as ImagePicker from "expo-image-picker";
