@@ -252,6 +252,7 @@ function LabelsIdentification() {
   return (
     <View style={styles.text}>
       <View>
+        <Text style={styles.renderText}>Label Objects</Text>
         <Button
           onPress={identifyFromFile}
           title="Label Identification"
@@ -407,6 +408,7 @@ const TextToSpeech = () => {
   return (
     <View style={styles.text}>
       <View>
+        <Text style={styles.renderText}>Speech Generation</Text>
         <TextInput
           placeholder={textToGenerateSpeech}
           onChangeText={setText}
@@ -451,6 +453,8 @@ function TextTranslation() {
   return (
     <View style={styles.text}>
       <View>
+        <Text style={styles.renderText}>Translate Text</Text>
+
         <TextInput
           value={textToTranslate}
           onChange={setText}
@@ -489,6 +493,7 @@ function TextInterpretation() {
   return (
     <View style={styles.text}>
       <View>
+        <Text style={styles.renderText}>Text Interpretation</Text>
         <TextInput
           value={textToInterpret}
           onChange={setText}
@@ -510,17 +515,13 @@ function App() {
   return (
     <ScrollView>
       <View style={styles.container}>
+        <TextTranslation />
         <TextIdentification />
         <EntityIdentification />
-        <Text style={styles.renderText}>Identify Entities (Advanced)</Text>
         <PredictionsUpload />
-        <Text style={styles.renderText}>Text Interpretation</Text>
         <TextInterpretation />
-        <Text style={styles.renderText}>Translate Text</Text>
-        <TextTranslation />
-        <Text style={styles.renderText}>Label Objects</Text>
+
         <LabelsIdentification />
-        <Text style={styles.renderText}>Speech Generation</Text>
         <TextToSpeech />
       </View>
     </ScrollView>
@@ -554,9 +555,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     padding: 10,
   },
-
-  // text: { padding: 20, fontWeight: "bold", fontSize: 20 },
-  audioRecorder: {},
 });
 
 export default withAuthenticator(App);
