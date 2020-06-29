@@ -374,13 +374,13 @@ function LabelsIdentification() {
 //   );
 // }
 
-const TextToSpeech = () => {
+function TextToSpeech() {
   const [response, setResponse] = useState("...");
   const [textToGenerateSpeech, setTextToGenerateSpeech] = useState(
     "write to speech"
   );
 
-  const generateTextToSpeech = () => {
+  function generateTextToSpeech() {
     setResponse("Generating audio...");
 
     Predictions.convert({
@@ -399,7 +399,7 @@ const TextToSpeech = () => {
         setResponse(`Generation completed`);
       })
       .catch((err) => setResponse(err));
-  };
+  }
 
   const setText = (value) => {
     setTextToGenerateSpeech(value);
@@ -423,7 +423,7 @@ const TextToSpeech = () => {
       </View>
     </View>
   );
-};
+}
 
 function TextTranslation() {
   const [response, setResponse] = useState(
@@ -516,13 +516,12 @@ function App() {
     <ScrollView>
       <View style={styles.container}>
         <TextTranslation />
+        <TextToSpeech />
         <TextIdentification />
         <EntityIdentification />
         <PredictionsUpload />
-        <TextInterpretation />
-
         <LabelsIdentification />
-        <TextToSpeech />
+        <TextInterpretation />
       </View>
     </ScrollView>
   );
