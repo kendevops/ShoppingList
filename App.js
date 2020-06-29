@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View, Button, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Button,
+  Image,
+  ScrollView,
+} from "react-native";
 import { withAuthenticator } from "aws-amplify-react-native";
 import * as ImagePicker from "expo-image-picker";
 
@@ -61,6 +69,7 @@ function TextIdentification() {
   return (
     <View style={styles.text}>
       <View>
+        <Text style={styles.renderText}>Identify Text</Text>
         <Button
           onPress={identifyFromFile}
           title="Choose Image"
@@ -145,6 +154,7 @@ function EntityIdentification() {
   return (
     <View>
       <View>
+        <Text style={styles.renderText}>Identify Entities</Text>
         <Button
           onPress={identifyFromFile}
           title="Entity Identification"
@@ -164,9 +174,8 @@ function PredictionsUpload() {
    * This will upload user images to the appropriate bucket prefix
    * and a Lambda trigger will automatically perform indexing
    */
-
-  function upload() {
-    let pix = ImagePicker.launchImageLibraryAsync({
+  async function upload() {
+    let pix = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
     });
 
@@ -499,22 +508,22 @@ function TextInterpretation() {
 
 function App() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.renderText}>Identify Text</Text>
-      <TextIdentification />
-      <Text style={styles.renderText}>Identify Entities</Text>
-      <EntityIdentification />
-      <Text style={styles.renderText}>Identify Entities (Advanced)</Text>
-      <PredictionsUpload />
-      <Text style={styles.renderText}>Text Interpretation</Text>
-      <TextInterpretation />
-      <Text style={styles.renderText}>Translate Text</Text>
-      <TextTranslation />
-      <Text style={styles.renderText}>Label Objects</Text>
-      <LabelsIdentification />
-      <Text style={styles.renderText}>Speech Generation</Text>
-      <TextToSpeech />
-    </View>
+    <ScrollView>
+      <View style={styles.container}>
+        <TextIdentification />
+        <EntityIdentification />
+        <Text style={styles.renderText}>Identify Entities (Advanced)</Text>
+        <PredictionsUpload />
+        <Text style={styles.renderText}>Text Interpretation</Text>
+        <TextInterpretation />
+        <Text style={styles.renderText}>Translate Text</Text>
+        <TextTranslation />
+        <Text style={styles.renderText}>Label Objects</Text>
+        <LabelsIdentification />
+        <Text style={styles.renderText}>Speech Generation</Text>
+        <TextToSpeech />
+      </View>
+    </ScrollView>
   );
 }
 
