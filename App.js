@@ -7,6 +7,7 @@ import {
   Button,
   Image,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import { withAuthenticator } from "aws-amplify-react-native";
 import * as ImagePicker from "expo-image-picker";
@@ -513,7 +514,6 @@ function TextInterpretation() {
 
 function App() {
   return (
-    <ScrollView>
       <View style={styles.container}>
         <TextTranslation />
         <TextToSpeech />
@@ -523,7 +523,6 @@ function App() {
         <LabelsIdentification />
         <TextInterpretation />
       </View>
-    </ScrollView>
   );
 }
 
@@ -547,6 +546,9 @@ const styles = StyleSheet.create({
     width: "80%",
     padding: 10,
     margin: 5,
+    borderWidth: 1,
+    backgroundColor: "#0000D0",
+    borderRadius: 10,
   },
 
   renderText: {
