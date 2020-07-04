@@ -38,7 +38,7 @@ function TextIdentification() {
 
     function dataURLtoFile(dataurl, filename) {
       var arr = dataurl.split(","),
-        mime = arr[0].match(/:(.*?);/)[1],
+        checkMatch = arr[0].match(/:(.*?);/)[1],
         bstr = atob(arr[1]),
         num = bstr.length,
         u8arr = new Uint8Array(num);
@@ -47,7 +47,7 @@ function TextIdentification() {
         u8arr[num] = bstr.charCodeAt(num);
       }
 
-      return new File([u8arr], filename, { type: mime });
+      return new File([u8arr], filename, { type: checkMatch });
     }
 
     const file = dataURLtoFile(pickerResult.uri);
